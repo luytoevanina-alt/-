@@ -1,0 +1,501 @@
+import { AngleInfo, EqualAnglePair, QuizQuestion, VertexConfig } from '../types/geometry';
+
+export const PRESET_CONFIGS: { id: string; name: string; cfg: VertexConfig }[] = [
+  {
+    id: 'abcd',
+    name: 'A - B - C - D (Классика)',
+    cfg: { A: 'A', B: 'B', C: 'C', D: 'D' },
+  },
+  {
+    id: 'klmn',
+    name: 'K - L - M - N (Вариант 2)',
+    cfg: { A: 'K', B: 'L', C: 'M', D: 'N' },
+  },
+  {
+    id: 'mnpq',
+    name: 'M - N - P - Q (Вариант 3)',
+    cfg: { A: 'M', B: 'N', C: 'P', D: 'Q' },
+  },
+  {
+    id: 'pqrs',
+    name: 'P - Q - R - S (Вариант 4)',
+    cfg: { A: 'P', B: 'Q', C: 'R', D: 'S' },
+  },
+];
+
+export const ANGLES: AngleInfo[] = [
+  {
+    id: 1,
+    numberLabel: '1',
+    vertex: 'A',
+    ray1: 'B',
+    ray2: 'C',
+    color: '#2563EB', // Blue
+    namePrimary: (cfg) => `∠${cfg.B}${cfg.A}${cfg.C}`,
+    nameSecondary: (cfg) => `∠${cfg.C}${cfg.A}${cfg.B}`,
+    description: (cfg) => `Угол между стороной ${cfg.A}${cfg.B} и диагональю ${cfg.A}${cfg.C} при вершине ${cfg.A}`,
+    arcRadius: 60,
+    isDoubleArc: false,
+  },
+  {
+    id: 2,
+    numberLabel: '2',
+    vertex: 'A',
+    ray1: 'C',
+    ray2: 'D',
+    color: '#D97706', // Amber / Orange
+    namePrimary: (cfg) => `∠${cfg.C}${cfg.A}${cfg.D}`,
+    nameSecondary: (cfg) => `∠${cfg.D}${cfg.A}${cfg.C}`,
+    description: (cfg) => `Угол между диагональю ${cfg.A}${cfg.C} и стороной ${cfg.A}${cfg.D} при вершине ${cfg.A}`,
+    arcRadius: 62,
+    isDoubleArc: true,
+  },
+  {
+    id: 3,
+    numberLabel: '3',
+    vertex: 'C',
+    ray1: 'B',
+    ray2: 'A',
+    color: '#D97706', // Amber / Orange (alternate interior to 2)
+    namePrimary: (cfg) => `∠${cfg.B}${cfg.C}${cfg.A}`,
+    nameSecondary: (cfg) => `∠${cfg.A}${cfg.C}${cfg.B}`,
+    description: (cfg) => `Угол между стороной ${cfg.B}${cfg.C} и диагональю ${cfg.C}${cfg.A} при вершине ${cfg.C}`,
+    arcRadius: 62,
+    isDoubleArc: true,
+  },
+  {
+    id: 4,
+    numberLabel: '4',
+    vertex: 'C',
+    ray1: 'A',
+    ray2: 'D',
+    color: '#2563EB', // Blue (alternate interior to 1)
+    namePrimary: (cfg) => `∠${cfg.A}${cfg.C}${cfg.D}`,
+    nameSecondary: (cfg) => `∠${cfg.D}${cfg.C}${cfg.A}`,
+    description: (cfg) => `Угол между диагональю ${cfg.A}${cfg.C} и стороной ${cfg.C}${cfg.D} при вершине ${cfg.C}`,
+    arcRadius: 60,
+    isDoubleArc: false,
+  },
+  {
+    id: 5,
+    numberLabel: '5',
+    vertex: 'B',
+    ray1: 'A',
+    ray2: 'C',
+    color: '#059669', // Emerald
+    namePrimary: (cfg) => `∠${cfg.A}${cfg.B}${cfg.C}`,
+    nameSecondary: (cfg) => `∠${cfg.C}${cfg.B}${cfg.A}`,
+    description: (cfg) => `Полный угол параллелограмма при вершине ${cfg.B}`,
+    arcRadius: 48,
+    isDoubleArc: false,
+  },
+  {
+    id: 6,
+    numberLabel: '6',
+    vertex: 'D',
+    ray1: 'A',
+    ray2: 'C',
+    color: '#059669', // Emerald (opposite to 5)
+    namePrimary: (cfg) => `∠${cfg.A}${cfg.D}${cfg.C}`,
+    nameSecondary: (cfg) => `∠${cfg.C}${cfg.D}${cfg.A}`,
+    description: (cfg) => `Полный угол параллелограмма при вершине ${cfg.D}`,
+    arcRadius: 48,
+    isDoubleArc: false,
+  },
+];
+
+export const EQUAL_ANGLE_PAIRS: EqualAnglePair[] = [
+  {
+    id: 'alt_1_4',
+    title: (cfg) => `Угол 1 и Угол 4: ∠${cfg.B}${cfg.A}${cfg.C} = ∠${cfg.A}${cfg.C}${cfg.D}`,
+    angle1Id: 1,
+    angle2Id: 4,
+    reason: (cfg) => `Накрест лежащие при параллельных прямых ${cfg.A}${cfg.B} ∥ ${cfg.C}${cfg.D} и секущей ${cfg.A}${cfg.C}`,
+    parallelLines: (cfg) => `${cfg.A}${cfg.B} ∥ ${cfg.C}${cfg.D}`,
+    transversal: (cfg) => `${cfg.A}${cfg.C}`,
+  },
+  {
+    id: 'alt_2_3',
+    title: (cfg) => `Угол 2 и Угол 3: ∠${cfg.C}${cfg.A}${cfg.D} = ∠${cfg.B}${cfg.C}${cfg.A}`,
+    angle1Id: 2,
+    angle2Id: 3,
+    reason: (cfg) => `Накрест лежащие при параллельных прямых ${cfg.B}${cfg.C} ∥ ${cfg.A}${cfg.D} и секущей ${cfg.A}${cfg.C}`,
+    parallelLines: (cfg) => `${cfg.B}${cfg.C} ∥ ${cfg.A}${cfg.D}`,
+    transversal: (cfg) => `${cfg.A}${cfg.C}`,
+  },
+  {
+    id: 'opp_5_6',
+    title: (cfg) => `Угол 5 и Угол 6: ∠${cfg.A}${cfg.B}${cfg.C} = ∠${cfg.A}${cfg.D}${cfg.C}`,
+    angle1Id: 5,
+    angle2Id: 6,
+    reason: (cfg) => `Противоположные углы параллелограмма всегда равны`,
+    parallelLines: (cfg) => `${cfg.A}${cfg.B} ∥ ${cfg.C}${cfg.D} и ${cfg.B}${cfg.C} ∥ ${cfg.A}${cfg.D}`,
+    transversal: (cfg) => `—`,
+  },
+];
+
+// In every question below, EVERY OPTION IS HOMOGENEOUS (single angle notation, NO "или", NO pairs!)
+export const QUIZ_QUESTIONS: QuizQuestion[] = [
+  {
+    id: 'q1',
+    targetAngleId: 1,
+    questionText: () => `Выбери буквенное обозначение угла номер 1:`,
+    subtitle: (cfg) => `Посмотри на чертеж: стороны угла 1 — это сторона ${cfg.A}${cfg.B} и диагональ ${cfg.A}${cfg.C}.`,
+    options: (cfg) => [
+      {
+        id: 'opt1',
+        text: `∠${cfg.B}${cfg.A}${cfg.C}`,
+        isCorrect: true,
+        explanation: `Верно! Стороны угла — лучи ${cfg.A}${cfg.B} и ${cfg.A}${cfg.C}. Вершина ${cfg.A} находится строго в центре: ∠${cfg.B}${cfg.A}${cfg.C}.`,
+      },
+      {
+        id: 'opt2',
+        text: `∠${cfg.A}${cfg.B}${cfg.C}`,
+        isCorrect: false,
+        explanation: `Ошибка: здесь вершина в середине — буква ${cfg.B}. Это угол номер 5, а не угол 1!`,
+      },
+      {
+        id: 'opt3',
+        text: `∠${cfg.B}${cfg.C}${cfg.A}`,
+        isCorrect: false,
+        explanation: `Ошибка: здесь вершина в середине — буква ${cfg.C}. Это угол номер 3!`,
+      },
+      {
+        id: 'opt4',
+        text: `∠${cfg.A}${cfg.D}${cfg.C}`,
+        isCorrect: false,
+        explanation: `Ошибка: это угол с вершиной ${cfg.D} (угол номер 6).`,
+      },
+    ],
+    pedagogicalHint: (cfg) => `Главное правило: вершина угла ВСЕГДА пишется второй (в середине). У угла 1 вершина — точка ${cfg.A}!`,
+  },
+  {
+    id: 'q2',
+    targetAngleId: 2,
+    questionText: () => `Выбери буквенное обозначение угла номер 2:`,
+    subtitle: (cfg) => `Угол 2 расположен между диагональю ${cfg.A}${cfg.C} и нижней стороной ${cfg.A}${cfg.D}.`,
+    options: (cfg) => [
+      {
+        id: 'opt1',
+        text: `∠${cfg.C}${cfg.A}${cfg.D}`,
+        isCorrect: true,
+        explanation: `Правильно! Стороны этого угла — ${cfg.A}${cfg.C} и ${cfg.A}${cfg.D}, вершина — точка ${cfg.A} в центре.`,
+      },
+      {
+        id: 'opt2',
+        text: `∠${cfg.A}${cfg.C}${cfg.D}`,
+        isCorrect: false,
+        explanation: `Ошибка: у этого угла вершина ${cfg.C} (это угол номер 4).`,
+      },
+      {
+        id: 'opt3',
+        text: `∠${cfg.A}${cfg.D}${cfg.C}`,
+        isCorrect: false,
+        explanation: `Ошибка: у этого угла вершина ${cfg.D} (угол номер 6).`,
+      },
+      {
+        id: 'opt4',
+        text: `∠${cfg.B}${cfg.A}${cfg.C}`,
+        isCorrect: false,
+        explanation: `Ошибка: это соседний угол номер 1 при той же вершине ${cfg.A}.`,
+      },
+    ],
+    pedagogicalHint: (cfg) => `Найди стороны, образующие дугу 2: это лучи ${cfg.A}${cfg.C} и ${cfg.A}${cfg.D}. Вершина — ${cfg.A}!`,
+  },
+  {
+    id: 'q3',
+    targetAngleId: 1,
+    questionText: (cfg) => `Ученик назвал угол номер 1 как ∠${cfg.C}${cfg.A}${cfg.B}. Прав ли он?`,
+    subtitle: () => `Сравни записи: слева направо и справа налево.`,
+    options: (cfg) => [
+      {
+        id: 'opt1',
+        text: `Да, прав (вершина ${cfg.A} осталась в центре)`,
+        isCorrect: true,
+        explanation: `Отлично! Угол задается вершиной и двумя лучами. Направление обхода (${cfg.B}→${cfg.A}→${cfg.C} или ${cfg.C}→${cfg.A}→${cfg.B}) не меняет угол: ∠${cfg.B}${cfg.A}${cfg.C} = ∠${cfg.C}${cfg.A}${cfg.B}.`,
+      },
+      {
+        id: 'opt2',
+        text: `Нет, буквы можно писать только по часовой стрелке`,
+        isCorrect: false,
+        explanation: `Неверно. В геометрии оба порядка записи (${cfg.B}${cfg.A}${cfg.C} и ${cfg.C}${cfg.A}${cfg.B}) абсолютно равноправны!`,
+      },
+      {
+        id: 'opt3',
+        text: `Нет, буквы должны идти строго по алфавиту`,
+        isCorrect: false,
+        explanation: `Неверно. Порядок букв определяется геометрией сторон, а не алфавитом: вершина обязана быть в центре.`,
+      },
+      {
+        id: 'opt4',
+        text: `Нет, это обозначение для угла номер 4`,
+        isCorrect: false,
+        explanation: `У угла 4 вершина — точка ${cfg.C}, а здесь в середине стоит ${cfg.A}.`,
+      },
+    ],
+    pedagogicalHint: () => `Угол можно читать в обе стороны: от одного луча к другому через вершину.`,
+  },
+  {
+    id: 'q4',
+    targetAngleId: 3,
+    questionText: () => `Какое обозначение соответствует углу номер 3?`,
+    subtitle: (cfg) => `Обрати внимание, у какой вершины находится дуга угла 3.`,
+    options: (cfg) => [
+      {
+        id: 'opt1',
+        text: `∠${cfg.B}${cfg.C}${cfg.A}`,
+        isCorrect: true,
+        explanation: `Точно! Вершина угла 3 — точка ${cfg.C}, стороны — лучи ${cfg.C}${cfg.B} и ${cfg.C}${cfg.A}.`,
+      },
+      {
+        id: 'opt2',
+        text: `∠${cfg.B}${cfg.A}${cfg.C}`,
+        isCorrect: false,
+        explanation: `Ошибка: здесь вершина ${cfg.A} (угол номер 1).`,
+      },
+      {
+        id: 'opt3',
+        text: `∠${cfg.C}${cfg.B}${cfg.A}`,
+        isCorrect: false,
+        explanation: `Ошибка: здесь вершина ${cfg.B} (угол номер 5).`,
+      },
+      {
+        id: 'opt4',
+        text: `∠${cfg.A}${cfg.C}${cfg.D}`,
+        isCorrect: false,
+        explanation: `Ошибка: это соседний угол номер 4 при той же вершине ${cfg.C}.`,
+      },
+    ],
+    pedagogicalHint: (cfg) => `Дуга 3 нарисована у вершины ${cfg.C} между верхней стороной ${cfg.B}${cfg.C} и диагональю ${cfg.C}${cfg.A}.`,
+  },
+  {
+    id: 'q5',
+    targetAngleId: 4,
+    questionText: () => `Какое обозначение соответствует углу номер 4?`,
+    subtitle: (cfg) => `Угол 4 лежит между диагональю ${cfg.A}${cfg.C} и стороной ${cfg.C}${cfg.D}.`,
+    options: (cfg) => [
+      {
+        id: 'opt1',
+        text: `∠${cfg.A}${cfg.C}${cfg.D}`,
+        isCorrect: true,
+        explanation: `Верно! Стороны — лучи ${cfg.C}${cfg.A} и ${cfg.C}${cfg.D}, вершина — точка ${cfg.C} в центре.`,
+      },
+      {
+        id: 'opt2',
+        text: `∠${cfg.C}${cfg.A}${cfg.D}`,
+        isCorrect: false,
+        explanation: `Ошибка: здесь вершина в центре — ${cfg.A} (это угол номер 2).`,
+      },
+      {
+        id: 'opt3',
+        text: `∠${cfg.C}${cfg.D}${cfg.A}`,
+        isCorrect: false,
+        explanation: `Ошибка: здесь вершина в центре — ${cfg.D} (это угол номер 6).`,
+      },
+      {
+        id: 'opt4',
+        text: `∠${cfg.B}${cfg.C}${cfg.A}`,
+        isCorrect: false,
+        explanation: `Ошибка: это угол номер 3.`,
+      },
+    ],
+    pedagogicalHint: (cfg) => `У угла 4 вершина — точка ${cfg.C}. Ищи вариант с буквой ${cfg.C} в середине!`,
+  },
+  {
+    id: 'q6',
+    targetAngleId: 2,
+    questionText: (cfg) => `Угол 2 записан как ∠${cfg.C}${cfg.A}${cfg.D}. Какая еще запись обозначает этот же самый угол?`,
+    subtitle: () => `Все 4 варианта ниже содержат одну запись угла. Выбери эквивалентную!`,
+    options: (cfg) => [
+      {
+        id: 'opt1',
+        text: `∠${cfg.D}${cfg.A}${cfg.C}`,
+        isCorrect: true,
+        explanation: `Отлично! Вершина ${cfg.A} осталась в центре, а лучи ${cfg.A}${cfg.C} и ${cfg.A}${cfg.D} просто записаны в обратном порядке: ∠${cfg.C}${cfg.A}${cfg.D} = ∠${cfg.D}${cfg.A}${cfg.C}.`,
+      },
+      {
+        id: 'opt2',
+        text: `∠${cfg.A}${cfg.C}${cfg.D}`,
+        isCorrect: false,
+        explanation: `Ошибка: здесь вершина переместилась в точку ${cfg.C} (это угол номер 4).`,
+      },
+      {
+        id: 'opt3',
+        text: `∠${cfg.C}${cfg.D}${cfg.A}`,
+        isCorrect: false,
+        explanation: `Ошибка: здесь вершина ${cfg.D}.`,
+      },
+      {
+        id: 'opt4',
+        text: `∠${cfg.A}${cfg.D}${cfg.C}`,
+        isCorrect: false,
+        explanation: `Ошибка: здесь вершина ${cfg.D} (угол номер 6).`,
+      },
+    ],
+    pedagogicalHint: (cfg) => `Вершина угла — ${cfg.A}. Буква ${cfg.A} обязательно должна остаться строго в центре!`,
+  },
+  {
+    id: 'q7',
+    targetAngleId: 3,
+    questionText: (cfg) => `Угол 3 записан как ∠${cfg.B}${cfg.C}${cfg.A}. Какая еще запись обозначает этот же самый угол?`,
+    subtitle: () => `Найди запись этого же угла в обратном порядке обхода.`,
+    options: (cfg) => [
+      {
+        id: 'opt1',
+        text: `∠${cfg.A}${cfg.C}${cfg.B}`,
+        isCorrect: true,
+        explanation: `Верно! Обход ${cfg.A}→${cfg.C}→${cfg.B} задает тот же угол с вершиной ${cfg.C}.`,
+      },
+      {
+        id: 'opt2',
+        text: `∠${cfg.A}${cfg.B}${cfg.C}`,
+        isCorrect: false,
+        explanation: `Ошибка: здесь вершина ${cfg.B} (угол номер 5).`,
+      },
+      {
+        id: 'opt3',
+        text: `∠${cfg.B}${cfg.A}${cfg.C}`,
+        isCorrect: false,
+        explanation: `Ошибка: здесь вершина ${cfg.A} (угол номер 1).`,
+      },
+      {
+        id: 'opt4',
+        text: `∠${cfg.C}${cfg.A}${cfg.B}`,
+        isCorrect: false,
+        explanation: `Ошибка: вершина ${cfg.A}.`,
+      },
+    ],
+    pedagogicalHint: (cfg) => `Вершина угла 3 — точка ${cfg.C}. Значит, в правильном ответе ${cfg.C} стоит ровно посередине!`,
+  },
+  {
+    id: 'q8',
+    targetAngleId: 5,
+    questionText: (cfg) => `Как назвать угол параллелограмма номер 5 тремя буквами?`,
+    subtitle: (cfg) => `Вершина угла находится в точке ${cfg.B}.`,
+    options: (cfg) => [
+      {
+        id: 'opt1',
+        text: `∠${cfg.A}${cfg.B}${cfg.C}`,
+        isCorrect: true,
+        explanation: `Правильно! Стороны — ${cfg.B}${cfg.A} и ${cfg.B}${cfg.C}, вершина ${cfg.B} строго посередине.`,
+      },
+      {
+        id: 'opt2',
+        text: `∠${cfg.B}${cfg.A}${cfg.C}`,
+        isCorrect: false,
+        explanation: `Ошибка: здесь вершина в середине — точка ${cfg.A}.`,
+      },
+      {
+        id: 'opt3',
+        text: `∠${cfg.B}${cfg.C}${cfg.A}`,
+        isCorrect: false,
+        explanation: `Ошибка: здесь вершина в середине — точка ${cfg.C}.`,
+      },
+      {
+        id: 'opt4',
+        text: `∠${cfg.A}${cfg.C}${cfg.B}`,
+        isCorrect: false,
+        explanation: `Ошибка: вершина ${cfg.C}.`,
+      },
+    ],
+    pedagogicalHint: (cfg) => `Ищи вариант, где в центре стоит буква ${cfg.B}!`,
+  },
+  {
+    id: 'q9',
+    targetAngleId: 6,
+    questionText: (cfg) => `Как назвать угол параллелограмма номер 6 тремя буквами?`,
+    subtitle: (cfg) => `Вершина угла находится в точке ${cfg.D}.`,
+    options: (cfg) => [
+      {
+        id: 'opt1',
+        text: `∠${cfg.A}${cfg.D}${cfg.C}`,
+        isCorrect: true,
+        explanation: `Правильно! Стороны угла — ${cfg.D}${cfg.A} и ${cfg.D}${cfg.C}, вершина ${cfg.D} строго в центре.`,
+      },
+      {
+        id: 'opt2',
+        text: `∠${cfg.D}${cfg.A}${cfg.C}`,
+        isCorrect: false,
+        explanation: `Ошибка: вершина ${cfg.A} (угол 2).`,
+      },
+      {
+        id: 'opt3',
+        text: `∠${cfg.A}${cfg.C}${cfg.D}`,
+        isCorrect: false,
+        explanation: `Ошибка: вершина ${cfg.C} (угол 4).`,
+      },
+      {
+        id: 'opt4',
+        text: `∠${cfg.C}${cfg.A}${cfg.D}`,
+        isCorrect: false,
+        explanation: `Ошибка: вершина ${cfg.A}.`,
+      },
+    ],
+    pedagogicalHint: (cfg) => `Ищи вариант, где в центре стоит буква ${cfg.D}!`,
+  },
+  {
+    id: 'q10',
+    targetAngleId: 4,
+    questionText: (cfg) => `Какой номер на чертеже имеет угол ∠${cfg.D}${cfg.C}${cfg.A}?`,
+    subtitle: (cfg) => `Проследи путь взглядом: от точки ${cfg.D} к вершине ${cfg.C} и затем к точке ${cfg.A}.`,
+    options: () => [
+      {
+        id: 'opt1',
+        text: `Угол 4`,
+        isCorrect: true,
+        explanation: `Верно! Путь идет от точки D к вершине C и далее по диагонали к A. Это дуга под номером 4.`,
+      },
+      {
+        id: 'opt2',
+        text: `Угол 3`,
+        isCorrect: false,
+        explanation: `Ошибка: угол 3 лежит между стороной BC и диагональю CA.`,
+      },
+      {
+        id: 'opt3',
+        text: `Угол 1`,
+        isCorrect: false,
+        explanation: `Ошибка: угол 1 находится у вершины A, а не у вершины C.`,
+      },
+      {
+        id: 'opt4',
+        text: `Угол 2`,
+        isCorrect: false,
+        explanation: `Ошибка: угол 2 находится у вершины A.`,
+      },
+    ],
+    pedagogicalHint: (cfg) => `Буква в центре названия — ${cfg.C}. Значит, ищи угол у вершины ${cfg.C}!`,
+  },
+  {
+    id: 'q11',
+    questionText: (cfg) => `Почему угол 1 НЕЛЬЗЯ назвать просто одной буквой «∠${cfg.A}»?`,
+    subtitle: () => `Это самая частая ошибка восьмиклассников при оформлении задач!`,
+    options: (cfg) => [
+      {
+        id: 'opt1',
+        text: `Потому что диагональ делит угол при вершине ${cfg.A} на две части (угол 1 и угол 2)`,
+        isCorrect: true,
+        explanation: `Блестяще! При вершине ${cfg.A} сходятся три угла: угол 1, угол 2 и весь угол параллелограмма ∠${cfg.B}${cfg.A}${cfg.D}. Если сказать «∠${cfg.A}», запись двусмысленна!`,
+      },
+      {
+        id: 'opt2',
+        text: `Потому что в геометрии все углы обязаны иметь 3 буквы по правилам программы`,
+        isCorrect: false,
+        explanation: `Неверно. Если при вершине только один угол (как при B), его МОЖНО назвать одной буквой ∠${cfg.B}!`,
+      },
+      {
+        id: 'opt3',
+        text: `Потому что буква ${cfg.A} обозначает только отрезок, а не вершину`,
+        isCorrect: false,
+        explanation: `Неверно. Точка ${cfg.A} является вершиной, но одной буквы недостаточно при наличии нескольких углов.`,
+      },
+      {
+        id: 'opt4',
+        text: `Можно, учитель всегда засчитывает такую краткую запись без снижения баллов`,
+        isCorrect: false,
+        explanation: `Учитель снизит балл за двусмысленность! В задачах требуется трехбуквенная запись.`,
+      },
+    ],
+    pedagogicalHint: () => `Одной буквой угол можно называть ТОЛЬКО тогда, когда при этой вершине нет других углов.`,
+  },
+];
